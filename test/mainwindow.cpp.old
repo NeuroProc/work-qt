@@ -1,0 +1,257 @@
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include <QMessageBox>
+#include <QList>
+//#include <QString>
+#include <QTableView>
+#include <QStandardItemModel>
+#include <exception>
+
+void incMatrix();
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    //ui->tableWidget->setSizeIncrement(ui->tableWidget->width() + ui->tableWidget->horizontalHeader()->defaultSectionSize(),
+    //                                  ui->tableWidget->height() + ui->tableWidget->verticalHeader()->defaultSectionSize());
+
+    incMatrix();
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+   QMessageBox msg;
+/*
+   msg.setText("FIRST");
+   msg.exec();
+
+   QList<int> a;
+   for (int i = 0; i < 10; i++)
+       a[i] = i*10;
+
+   QStandardItemModel *tableModel = new QStandardItemModel(2,3,this); //2 Rows and 3 Columns
+   tableModel->setHorizontalHeaderItem(0, new QStandardItem(QString("1")));
+   tableModel->setHorizontalHeaderItem(1, new QStandardItem(QString("2")));
+   tableModel->setHorizontalHeaderItem(2, new QStandardItem(QString("3")));
+
+   ui->tableView->setModel(tableModel);
+*/
+    computeGauss();
+
+}
+
+
+void MainWindow::on_tableWidget_cellChanged(int row, int column)
+{
+    QMessageBox msg;
+/*
+    msg.setText(QString::number(row));
+    msg.exec();
+
+    QTableWidgetItem tmp = *(ui->tableWidget->item(row, column));
+    QString str = tmp.text();
+
+    try
+    {
+        str.toInt();
+    }
+    catch (...)
+    {
+        msg.setText(QString("ERROR %1").arg(str));
+        ui->tableWidget->setItem(row, column, new QTableWidgetItem(QString("0")));
+
+        return;
+    }
+*/
+
+    if (ui->tableWidget->rowCount() - 1 == row /*|| ui->tableWidget->columnCount() - 1 == column*/)
+    {
+
+        incMatrix();
+
+    }
+}
+
+void MainWindow::incMatrix()
+{
+    ui->tableWidget->setRowCount(ui->tableWidget->rowCount() + 1);
+    ui->tableWidget->setColumnCount(ui->tableWidget->columnCount() + 1);
+    ui->tableWidget->setGeometry(QRect(ui->tableWidget->geometry().x(), ui->tableWidget->geometry().y(),
+                                               ui->tableWidget->width() + 101,
+                                               ui->tableWidget->height() + 31));
+
+    //ui->tableWidget->setGeometry(QRect(ui->tableWidget->geometry().x(), ui->tableWidget->geometry().y(),
+    //                                       ui->tableWidget->width() + ui->tableWidget->horizontalHeader()->defaultSectionSize(),
+    //                                       ui->tableWidget->height() + ui->tableWidget->verticalHeader()->defaultSectionSize()));
+}
+
+int MainWindow::getMatrix(float ***a, int *size)
+{
+    *size = ui->tableWidget->rowCount();
+
+    int tmp = *size;
+    QTableWidgetItem tmpItem;
+    QString str;
+
+    tmp--;
+    *size = *size-1;
+
+    *a = new float *[tmp];
+    for (int i = 0; i < tmp; i++)
+        (*a)[i] = new float [tmp + 2]; //чтобы объекты не плодить, корни в ту же скидаю
+
+    for (int i = 0; i < tmp; i++)
+    {
+        for (int j = 0; j < tmp + 1; j++)
+        {
+
+            tmpItem = *(ui->tableWidget->item(i, j));
+            str = QString(tmpItem.text());
+
+            (*a)[i][j] = str.toFloat();
+
+            QMessageBox msg;
+            msg.setText(QString::number((*a)[i][tmp+1]));
+            msg.exec();
+        }
+        (*a)[i][tmp+1] = 0;
+    }
+
+    return tmp;
+}
+
+void MainWindow::exchange(float **a, int size, int from, int to){
+    for(int i = 0; i < size; i++){
+        a[from][i] = a[from][i] + a[to][i];
+        a[to][i] = a[from][i] - a[to][i];
+        a[from][i] = a[from][i] - a[to][i];
+    }
+}
+
+// определяем ближайшую строку с не 0 диоганалью вниз
+int MainWindow::getNoEmpty(float **a, int size, int begin){
+    for(int i = begin + 1; i < size; i++){
+        if(a[i][i] != 0){
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+void MainWindow::printMatrix(float **matr, int size)
+{
+    QString str;
+    ////////////////////////////////////////////////
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+            str += QString("%1  ").arg(matr[i][j]);
+
+        str += QString("\t%1\n").arg(matr[i][size]);
+        //str += QString("%1\n").arg(matr[i][size+1]);
+    }
+    ui->textEdit->setPlainText(str);
+    ////////////////////////////////////////////////
+}
+
+void MainWindow::computeGauss()
+{
+    float **matr;
+    int size;
+    QString str;
+
+    getMatrix(&matr, &size);
+
+    //printMatrix(matr, size);
+    ////////////////////////////////////////////////
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+            str += QString("%1  ").arg(matr[i][j]);
+
+        str += QString("\t%1\n").arg(matr[i][size]);
+        //str += QString("%1\n").arg(matr[i][size+1]);
+    }
+    ui->textEdit->setPlainText(str);
+    ////////////////////////////////////////////////
+
+    //str.clear();
+    //return;
+
+    if(size == 1) {
+        if(matr[0][0] != 0){
+           str += QString("%1\n").arg(matr[0][size] / matr[0][0]);
+        } else {
+            str += QString("X - любое число\n");
+        }
+        goto EXIT;
+    }
+        // прямой проход
+        // идем слево на право по коэфицентам х
+    for(int k = 0; k < size - 1; k++){
+        for(int m = k + 1; m < size; m++) {  // вычитаем по строкам
+
+            if(matr[m][m] == 0)        // если на диагонали элемент = 0, то поменяем местами строки
+            {
+                int to;
+                if ((to = getNoEmpty(matr, size, m)) < 0)
+                {
+                    str += QString("Ноль на диагонали. Эту систему невозможно решить методом Гаусса.\n");
+                    goto EXIT;
+                }
+
+                exchange(matr, size, m, to);
+            }
+
+            float delta = matr[m][k] / matr[0][k];
+
+            //вычисление новых коэфицентов уравнения
+            matr[m][size] = matr[m][size] - matr[0][size] * delta;
+            for(int z = 0; z < size; z++)
+                matr[m][z] = matr[m][k] - matr[0][k] * delta;
+        }
+        //printMatrix(matr, size);
+    }
+        // ищем решения
+    for(int m = size - 1; m >= 0; m--) {
+
+        float sum = 0.0;
+            // идем по строке спаво налево, считая сумму корень*коэфицент, до текущего корня
+        for(int i = size - 1; i > m; i--) {
+            sum += matr[i][size + 1] * matr[m][i];
+        }
+
+        matr[m][size + 1] = (matr[m][size] - sum) / matr[m][m];
+        //printMatrix(matr, size);
+        ////////////////////////////////////////////////
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+                str += QString("%1  ").arg(matr[i][j]);
+
+            str += QString("\t%1\n").arg(matr[i][size]);
+            //str += QString("%1\n").arg(matr[i][size+1]);
+        }
+        ui->textEdit->setPlainText(str);
+        ////////////////////////////////////////////////
+    }
+
+        // вывод решений
+    for(int i = 0; i < size; i++) {
+        str += QString("x[%1] = %2\n").arg(i).arg(matr[i][size + 1]);
+    }
+
+EXIT:
+    ui->textEdit->setPlainText(str);
+
+    delete[] matr;
+}
