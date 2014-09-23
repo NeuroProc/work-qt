@@ -18,7 +18,7 @@ SOURCES += main.cpp\
     draw.cpp \
     shape.cpp \
     rectangle.cpp \
-    ellipse.cpp
+    ellipse.cpp \
 
 HEADERS  += mainwindow.h \
     draw.h \

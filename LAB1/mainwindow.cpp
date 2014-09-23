@@ -7,33 +7,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     this->showFullScreen();
 
-
     wgt = new QPaintWidget(this);
-    wgt->resize(width(), height());
-    wgt->show();
+    setCentralWidget(wgt);
+
+    current = ui->actionLine;
+    wgt->current = 'L';
+
+    //wgt->show();
+    //wgt->mousePressEvent();
 
 
-    qDebug() << "MAIN:" << width() << ":" << height();
-    qDebug() << "WGT:" << wgt->width() << ":" << wgt->height();
-    qDebug() << "CUST" << ui->centralWidget->width() << ":" << ui->centralWidget->height();
+    //qDebug() << "MAIN:" << width() << ":" << height();
+    //qDebug() << "WGT:" << wgt->width() << ":" << wgt->height();
+    //qDebug() << "CUST" << ui->centralWidget->width() << ":" << ui->centralWidget->height();
 
-
-/*
-    shape *a = new line(20, 50, 500, 50);
-    QPaintWidget::current = a;
-
-    shape *b = new rectangle(20, 60, 500, 120);
-    QPaintWidget::current = b;
-*/
-    //shape *c = new ellipse(100, 100, 30, 20);
-
-    wgt->mylist.push_back(new ellipse(500, 500, 300, 200));
-    wgt->mylist.push_back(new line(0, 0, 800, 800));
-    wgt->mylist.push_back(new rectangle(50,50, 500,500));
-
+    //wgt->mylist.push_back(new ellipse(500, 500, 300, 200));
+    //wgt->mylist.push_back(new line(0, 0, 800, 800));
+    //wgt->mylist.push_back(new rectangle(50,50, 500,500));
+  
 }
 
 MainWindow::~MainWindow()
@@ -42,3 +35,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+bool MainWindow::setCurrentAction(QAction *newAction)
+{
+    if (current != newAction)
+    {
+        current->setChecked(false);
+        newAction->setChecked(true);
+        current = newAction;
+
+        return true;
+    }
+    return false;
+}
+
+
+void MainWindow::on_actionLine_changed()
+{
+    if (setCurrentAction(ui->actionLine))
+        wgt->current = 'L';
+}
+
+void MainWindow::on_actionRect_changed()
+{
+    if (setCurrentAction(ui->actionRect))
+        wgt->current = 'R';
+}
+
+void MainWindow::on_actionEllipse_changed()
+{
+    if (setCurrentAction(ui->actionEllipse))
+        wgt->current = 'E';
+}

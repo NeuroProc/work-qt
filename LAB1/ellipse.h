@@ -12,6 +12,7 @@ private:
 
 public:
     ellipse(int, int, int, int);
+    ellipse(QPoint);
     void drawMySelf(QPainter *);
 };
 

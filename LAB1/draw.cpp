@@ -20,3 +20,21 @@ void QPaintWidget::paintEvent(QPaintEvent *) {
     painter.end();
 
 }
+
+void QPaintWidget::mousePressEvent(QMouseEvent *)
+{
+    switch (current)
+    {
+    case 'L':
+        mylist.push_back(new line(this->mapFromGlobal(QCursor::pos())));
+        break;
+    case 'R':
+        mylist.push_back(new rectangle(this->mapFromGlobal(QCursor::pos())));
+        break;
+    case 'E':
+        mylist.push_back(new ellipse(this->mapFromGlobal(QCursor::pos())));
+        break;
+    }
+
+    this->update();
+}

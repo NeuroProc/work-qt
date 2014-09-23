@@ -10,6 +10,7 @@ private:
 
 public:
     line(int, int, int, int);
+    line(QPoint);
     void drawMySelf(QPainter *);
 
 };

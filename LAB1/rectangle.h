@@ -10,6 +10,7 @@ private:
 
 public:
     rectangle(int, int, int, int);
+    rectangle(QPoint);
     void drawMySelf(QPainter *);
 
 };
