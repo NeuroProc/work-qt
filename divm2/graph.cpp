@@ -51,13 +51,18 @@ void Graph::addCurve()
     //#include <qwt_plot_curve.h>
     curve = new QwtPlotCurve();
     curve->setTitle( "Curve" );
-    curve->setPen( Qt::blue, 2, Qt::SolidLine ); // цвет и толщина кривой
+    //curve->setPen( Qt::blue, 2, Qt::SolidLine ); // цвет и толщина кривой
 
     // Маркеры кривой
     // #include <qwt_symbol.h>
     QwtSymbol *symbol = new QwtSymbol( QwtSymbol::Ellipse,
         QBrush( Qt::yellow ), QPen( Qt::red, 2, Qt::SolidLine ), QSize( 4, 4 ) );
     //curve->setSymbol( symbol );
+}
+
+void Graph::setCurveColor(Qt::GlobalColor c)
+{
+    curve->setPen( c, 2, Qt::SolidLine ); // цвет и толщина кривой
 }
 
 void Graph::update()

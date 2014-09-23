@@ -69,6 +69,7 @@ int MainWindow::getMaxX()
 void MainWindow::on_pushButton_clicked()
 {
     gr->points.clear();
+    gr->setCurveColor(Qt::blue);
 
     int maxX = getMaxX();
 
@@ -83,6 +84,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     gr->points.clear();
+    gr->setCurveColor(Qt::red);
 
     int maxX = getMaxX();
 

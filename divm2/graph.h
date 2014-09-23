@@ -25,6 +25,7 @@ public:
     ~Graph();
 
     void update();
+    void setCurveColor(Qt::GlobalColor);
 
     QPolygonF points;
     QwtPlot *d_plot;
