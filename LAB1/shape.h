@@ -4,12 +4,19 @@
 #include <QPoint>
 #include <QPainter>
 #include <QString>
+#include <QWidget>
 
-class shape
+class Shape;
+
+class Shape : public QObject
 {
+    Q_OBJECT
 public:
-    //static QPainter painter;
-    virtual void drawMySelf(QPainter *) = 0;
+    Shape() {}
+    Shape(const Shape &) {}
+    virtual ~Shape() {}
+
+    virtual void drawMySelf(QPainter *);
     static const int def = 100;
 };
 

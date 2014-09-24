@@ -3,16 +3,23 @@
 
 #include "shape.h"
 
-class rectangle : public shape
+class Rectangle;
+Q_DECLARE_METATYPE(Rectangle)
+
+class Rectangle : public Shape
 {
+    Q_OBJECT
 private:
     QPoint A, B;
 
 public:
-    rectangle(int, int, int, int);
-    rectangle(QPoint);
+    Rectangle() {}
+    Rectangle(int, int, int, int);
+    Rectangle(QPoint);
+
     void drawMySelf(QPainter *);
 
+    static int id;
 };
 
 #endif // RECTANGLE_H

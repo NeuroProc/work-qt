@@ -3,15 +3,23 @@
 
 #include "shape.h"
 
-class line : public shape
+class Line;
+Q_DECLARE_METATYPE(Line)
+
+class Line : public Shape
 {
+    Q_OBJECT
 private:
     QPoint A, B;
 
 public:
-    line(int, int, int, int);
-    line(QPoint);
+    Line() { }
+    Line(int, int, int, int);
+    Line(QPoint);
+
     void drawMySelf(QPainter *);
+
+    static int id;
 
 };
 

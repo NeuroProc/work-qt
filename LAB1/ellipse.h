@@ -3,17 +3,24 @@
 
 #include "shape.h"
 
-class ellipse : public shape
+class Ellipse;
+Q_DECLARE_METATYPE(Ellipse)
+
+class Ellipse : public Shape
 {
+    Q_OBJECT
 private:
     QPoint center;
     int rx, ry;
 
-
 public:
-    ellipse(int, int, int, int);
-    ellipse(QPoint);
+    Ellipse() {}
+    Ellipse(int, int, int, int);
+    Ellipse(QPoint);
+
     void drawMySelf(QPainter *);
+
+    static int id;
 };
 
 #endif // ELLIPSE_H

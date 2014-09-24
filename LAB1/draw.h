@@ -20,7 +20,7 @@ public:
     QPaintWidget(QWidget * parent = 0);
     //void drawMyLine(QPainter *);
     //static shape *current;
-    QVector<shape *> mylist;
+    QVector<Shape *> mylist;
     char current;
 
 protected:
