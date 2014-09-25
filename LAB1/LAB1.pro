@@ -19,12 +19,14 @@ SOURCES += main.cpp\
     shape.cpp \
     rectangle.cpp \
     ellipse.cpp \
+    extra.cpp
 
 HEADERS  += mainwindow.h \
     draw.h \
     line.h \
     rectangle.h \
     shape.h \
-    ellipse.h
+    ellipse.h \
+    extra.h
 
 FORMS    += mainwindow.ui

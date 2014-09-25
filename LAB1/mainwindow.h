@@ -4,8 +4,6 @@
 #include <QMainWindow>
 #include "draw.h"
 #include "line.h"
-#include "rectangle.h"
-#include "ellipse.h"
 
 #include <QDebug>
 
@@ -21,13 +19,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    bool setCurrentAction(QAction *);
     QAction *current;
 
 private slots:
-    void on_actionLine_changed();
-    void on_actionRect_changed();
-    void on_actionEllipse_changed();
+    void setCurrentAction(QAction *);
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

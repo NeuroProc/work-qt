@@ -11,7 +11,8 @@ class Ellipse : public Shape
     Q_OBJECT
 private:
     QPoint center;
-    int rx, ry;
+    int rx, ry;   
+    static int id;
 
 public:
     Ellipse() {}
@@ -19,8 +20,7 @@ public:
     Ellipse(QPoint);
 
     void drawMySelf(QPainter *);
-
-    static int id;
+    void initDefault(QPoint);
 };
 
 #endif // ELLIPSE_H

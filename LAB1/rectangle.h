@@ -11,6 +11,7 @@ class Rectangle : public Shape
     Q_OBJECT
 private:
     QPoint A, B;
+    static int id;
 
 public:
     Rectangle() {}
@@ -18,8 +19,7 @@ public:
     Rectangle(QPoint);
 
     void drawMySelf(QPainter *);
-
-    static int id;
+    void initDefault(QPoint);
 };
 
 #endif // RECTANGLE_H

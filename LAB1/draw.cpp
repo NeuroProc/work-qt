@@ -23,17 +23,11 @@ void QPaintWidget::paintEvent(QPaintEvent *) {
 
 void QPaintWidget::mousePressEvent(QMouseEvent *)
 {
-    switch (current)
+    if (int id = QMetaType::type(current.toAscii().data()))
     {
-    case 'L':
-        mylist.push_back(new Line(this->mapFromGlobal(QCursor::pos())));
-        break;
-    case 'R':
-        mylist.push_back(new Rectangle(this->mapFromGlobal(QCursor::pos())));
-        break;
-    case 'E':
-        mylist.push_back(new Ellipse(this->mapFromGlobal(QCursor::pos())));
-        break;
+        Shape *s = (Shape *)QMetaType::construct(id);
+        s->initDefault(this->mapFromGlobal(QCursor::pos()));
+        mylist.push_back(s);
     }
 
     this->update();

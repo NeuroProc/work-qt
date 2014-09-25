@@ -11,37 +11,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->showFullScreen();
 
-
-    //shape *s = new shape();
-    //s->setParent(this);
-   Shape *l = new Line(QPoint(0,0));
-    //l->setParent(this);
-
-    qDebug() << QMetaType::type("Line");
-    qDebug() << Line::id;
-    qDebug() << Line::staticMetaObject.superClass()->className();
-    //qDebug() << l->parent();
-/*
-    QObjectList a = QWidget::children();
-
-    for (int i = 0; i < a.size(); i++)
-        qDebug() << a[i];
-    qDebug() << "END";
-
-*/
-
     wgt = new QPaintWidget(this);
+
     setCentralWidget(wgt);
+    ui->frame->setParent(wgt);
 
     current = ui->actionLine;
-    wgt->current = 'L';
+    wgt->current = "Line";
 
-    //wgt->mylist.push_back(new ellipse(500, 500, 300, 200));
-    //wgt->mylist.push_back(new line(0, 0, 800, 800));
-    //wgt->mylist.push_back(new rectangle(50,50, 500,500));
-
-    //shape *l = new line(QPoint(0,0));
-  
+    connect(ui->menuDraw, SIGNAL(triggered(QAction*)), this, SLOT(setCurrentAction(QAction*)));
 }
 
 MainWindow::~MainWindow()
@@ -50,38 +28,19 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-bool MainWindow::setCurrentAction(QAction *newAction)
+void MainWindow::setCurrentAction(QAction *newAction)
 {
-    if (current != newAction)
-    {
-        current->setChecked(false);
-        newAction->setChecked(true);
-        current = newAction;
+    qDebug() << newAction->text();
 
-        return true;
-    }
-    else
-    {
-        //newAction->setChecked(true);
-        return false;
-    }
+
+    current->setChecked(false);
+    newAction->setChecked(true);
+    current = newAction;
+
+    wgt->current = current->text();
 }
 
-
-void MainWindow::on_actionLine_changed()
+void MainWindow::on_pushButton_clicked()
 {
-    if (setCurrentAction(ui->actionLine))
-        wgt->current = 'L';
-}
-
-void MainWindow::on_actionRect_changed()
-{
-    if (setCurrentAction(ui->actionRect))
-        wgt->current = 'R';
-}
-
-void MainWindow::on_actionEllipse_changed()
-{
-    if (setCurrentAction(ui->actionEllipse))
-        wgt->current = 'E';
+    Shape::extraNum = ui->lineEdit->text().toInt();
 }

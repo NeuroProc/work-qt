@@ -10,6 +10,7 @@
 #include "line.h"
 #include "ellipse.h"
 #include "rectangle.h"
+#include "extra.h"
 
 class QPaintEvent;
 
@@ -18,10 +19,9 @@ class QPaintWidget : public QWidget
     Q_OBJECT
 public:
     QPaintWidget(QWidget * parent = 0);
-    //void drawMyLine(QPainter *);
-    //static shape *current;
+
     QVector<Shape *> mylist;
-    char current;
+    QString current;
 
 protected:
     void mousePressEvent(QMouseEvent *);

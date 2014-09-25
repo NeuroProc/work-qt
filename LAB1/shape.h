@@ -17,7 +17,9 @@ public:
     virtual ~Shape() {}
 
     virtual void drawMySelf(QPainter *);
+    virtual void initDefault(QPoint);
     static const int def = 100;
+    static int extraNum;
 };
 
 #endif // SHAPE_H
