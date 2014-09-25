@@ -138,4 +138,8 @@ void MainWindow::on_pushButton_4_clicked()
         ui->label_3->setText(QString::number(Lagrange::interpolate(ui->lineEdit_2->text().toFloat(), values, rowCount)));
         ui->label_3->show();
     }
+    else
+    {
+        ui->label_3->hide();
+    }
 }
