@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     shape.cpp \
     rectangle.cpp \
     ellipse.cpp \
-    extra.cpp
+    extra.cpp \
+    serial.cpp
 
 HEADERS  += mainwindow.h \
     draw.h \
@@ -27,6 +28,7 @@ HEADERS  += mainwindow.h \
     rectangle.h \
     shape.h \
     ellipse.h \
-    extra.h
+    extra.h \
+    serial.h
 
 FORMS    += mainwindow.ui

@@ -4,6 +4,12 @@ QPaintWidget::QPaintWidget(QWidget * parent) : QWidget(parent)
 {
 }
 
+QPaintWidget::~QPaintWidget()
+{
+    foreach(Shape *obj, mylist)
+        obj->deleteLater();
+}
+
 void QPaintWidget::paintEvent(QPaintEvent *) {
 
     QPainter painter;
@@ -27,6 +33,8 @@ void QPaintWidget::mousePressEvent(QMouseEvent *)
     {
         Shape *s = (Shape *)QMetaType::construct(id);
         s->initDefault(this->mapFromGlobal(QCursor::pos()));
+        s->setPoint(this->mapFromGlobal(QCursor::pos()));
+        //qDebug() << s->getPoint() << ":" << s->property("point");
         mylist.push_back(s);
     }
 

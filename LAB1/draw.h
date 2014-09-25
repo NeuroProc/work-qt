@@ -19,6 +19,7 @@ class QPaintWidget : public QWidget
     Q_OBJECT
 public:
     QPaintWidget(QWidget * parent = 0);
+    ~QPaintWidget();
 
     QVector<Shape *> mylist;
     QString current;

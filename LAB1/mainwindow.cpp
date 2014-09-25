@@ -44,3 +44,18 @@ void MainWindow::on_pushButton_clicked()
 {
     Shape::extraNum = ui->lineEdit->text().toInt();
 }
+
+void MainWindow::on_actionSave_triggered()
+{
+    QVector<QString> stream;
+
+    //stream << "LOL";
+    foreach(Shape *s, wgt->mylist)
+    {
+        stream.push_back(s->Serialize());
+    }
+
+    foreach(QString a, stream)
+        qDebug() << a;
+
+}
