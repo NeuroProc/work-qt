@@ -30,7 +30,7 @@ void Draw::drawPixel(int x, int y, uint c)
     //img->setPixel(x, y, c);
     
     painter.begin(img);
-    painter.fillRect(QRect(x, y, 5, 5), QBrush(c));
+    painter.fillRect(QRect(x, y, 7, 7), QBrush(c));
     painter.end();
 }
 

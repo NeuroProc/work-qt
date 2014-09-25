@@ -31,6 +31,10 @@ void MainWindow::on_pushButton_clicked()
         return;
     }
 
+    if (numP < 0 || numC < 0)
+        return;
+    qDebug() << numP << ":" << numC;
+
     dr = new Draw(width(), height(), this);
     obj = new Classifier(numP, numC, this, dr);
 
@@ -48,6 +52,10 @@ void MainWindow::on_pushButton_clicked()
     }
     qDebug("FINISH!");
 
+    QMessageBox a;
+    a.setText("FINISHED");
+    a.exec();
+
 }
 
 void MainWindow::delay(int N)
@@ -57,3 +65,5 @@ void MainWindow::delay(int N)
     while( QTime::currentTime() < dieTime )
     QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
+
+
