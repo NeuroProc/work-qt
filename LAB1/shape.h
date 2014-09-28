@@ -5,15 +5,14 @@
 #include <QPainter>
 #include <QString>
 #include <QWidget>
-#include "serial.h"
 
 class Shape;
 
-class Shape : /*public QObject,*/ public SerializedBase
+class Shape : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QPoint point READ getPoint WRITE setPoint)
-    //Q_PROPERTY(int m_extraNum READ m_extraNum WRITE setExtraNum)
+    Q_PROPERTY(int x READ x WRITE setX)
+    Q_PROPERTY(int y READ y WRITE setY)
 
 public:
     Shape() {}
@@ -26,8 +25,11 @@ public:
     static int def;
     static int extraNum;
 
-    QPoint getPoint();
-    void setPoint(const QPoint point);
+    int x() const { return mX; }
+    void setX(const int x) { mX = x; }
+
+    int y() const { return mY; }
+    void setY(const int y) { mY = y; }
 
 /*
     int m_def() { return def; }
@@ -37,7 +39,7 @@ public:
     void setExtraNum(const int extraNum);
 */
 private:
-    QPoint m_point;
+    int mX, mY;
 };
 
 #endif // SHAPE_H

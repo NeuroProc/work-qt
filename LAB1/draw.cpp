@@ -31,10 +31,15 @@ void QPaintWidget::mousePressEvent(QMouseEvent *)
 {
     if (int id = QMetaType::type(current.toAscii().data()))
     {
+        QPoint pos = this->mapFromGlobal(QCursor::pos());
+
         Shape *s = (Shape *)QMetaType::construct(id);
-        s->initDefault(this->mapFromGlobal(QCursor::pos()));
-        s->setPoint(this->mapFromGlobal(QCursor::pos()));
-        //qDebug() << s->getPoint() << ":" << s->property("point");
+        s->initDefault(pos);
+        s->setProperty("x", pos.x());
+        s->setProperty("y", pos.y());
+
+        qDebug() << s->property("point");
+
         mylist.push_back(s);
     }
 

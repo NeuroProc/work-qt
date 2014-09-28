@@ -4,16 +4,25 @@
 #include <QDataStream>
 #include <QMetaProperty>
 #include <QMetaObject>
+#include <QDomDocument>
 
-class SerializedBase;
+class Serializer;
 
-class SerializedBase : public QObject
+class Serializer
 {
-    Q_OBJECT
 public:
-    QString Serialize();
-    bool DeSerialize(QString *dataStream);
+    bool serialize(QObject *object, QIODevice *output);
+    bool _deserialize(QIODevice *input, QObject *object);
 
+    template<class T>
+    T * deserialize(QIODevice *input)
+    {
+        T* object = new T();
+        if(_deserialize(input, object))
+            return object;
+        delete object;
+        return NULL;
+    }
 };
 
 #endif // SERIAL_H

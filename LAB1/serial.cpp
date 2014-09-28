@@ -2,28 +2,60 @@
 
 #include <QDebug>
 
-QString SerializedBase::Serialize()
+#include <QPoint>
+#include <QBitArray>
+#include <QFile>
+
+bool Serializer::serialize(QObject *object, QIODevice *output)
 {
-    QString data;
-  for (int i = 1; i < this->metaObject()->propertyCount(); i++)
-  {
-     QMetaProperty prop = this->metaObject()->property(i);
-     const char* propName = prop.name();
-     data = static_cast<char *>((this->property(propName)).data());
-  }
-  return data;
+    QDomDocument doc;
+    QDomElement root = doc.createElement(object->metaObject()->className());
+    doc.appendChild(root);
+
+    for(int i = 0; i < object->metaObject()->propertyCount(); i++)
+    {
+        QMetaProperty prop = object->metaObject()->property(i);
+        QString propName = prop.name();
+        if(propName == "objectName")
+            continue;
+        QDomElement el = doc.createElement(propName);
+        QVariant value = object->property(propName.toAscii().data());
+        QDomText txt = doc.createTextNode( value.toString() );
+        el.appendChild(txt);
+        root.appendChild(el);
+    }
+
+    //QFile output1("note.xml");
+    QTextStream stream(output);
+    doc.save(stream, 2);
+
+    qDebug() << doc.toString();
+
+    return true;
 }
 
-bool SerializedBase::DeSerialize(QString *dataStream)
+bool Serializer::_deserialize(QIODevice* input, QObject* object)
 {
-  for (int i = 1; i < this->metaObject()->propertyCount(); i++)
-  {
-     QMetaProperty prop = this->metaObject()->property(i);
-     const char* propName = prop.name();
-     QVariant v;
-     //(void *)(*dataStream).toAscii().data();
-     v.fromValue((void *)(*dataStream).toAscii().data());
-     this->setProperty(propName, v);
-  }
-  return true;
+    QDomDocument doc;
+    if (!doc.setContent(input))
+        return false;
+    QDomElement root = doc.documentElement();
+
+    qDebug() << root;
+
+    for(int i = 0; i < object->metaObject()->propertyCount(); i++)
+    {
+        QMetaProperty prop = object->metaObject()->property(i);
+        QString propName = prop.name();
+        if(propName == "objectName")
+            continue;
+        QDomNodeList nodeList = root.elementsByTagName(propName);
+        if(nodeList.length() < 1)
+            continue;
+        QDomNode node = nodeList.at(0);
+        //QVariant value = object->property(propName.toAscii().data());
+        QString v = node.toElement().text();
+        object->setProperty(propName.toAscii().data(), QVariant(v));
+    }
+    return true;
 }

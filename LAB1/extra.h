@@ -10,6 +10,8 @@ Q_DECLARE_METATYPE(Extra)
 class Extra : public Shape
 {
     Q_OBJECT
+
+    Q_PROPERTY(int num READ num WRITE setNum)
 private:
     static int id;
 
@@ -19,6 +21,9 @@ public:
 
     void drawMySelf(QPainter *);
     void initDefault(QPoint);
+
+    int num() { return extraNum; }
+    void setNum(const int num) { extraNum = num; }
 
     QVector<QPoint> points;
 };

@@ -2,15 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFile>
 #include "draw.h"
 #include "line.h"
-
-
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
-#include <qjson/qjson_export.h>
-#include <qjson/serializerrunnable.h>
+#include "serial.h"
 
 #include <QDebug>
 
@@ -30,9 +25,7 @@ public:
 
 private slots:
     void setCurrentAction(QAction *);
-
     void on_pushButton_clicked();
-
     void on_actionSave_triggered();
 
 private:

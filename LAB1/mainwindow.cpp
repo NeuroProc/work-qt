@@ -47,15 +47,22 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QVector<QString> stream;
+    QFile stream("lol.xml");
+    Serializer seria;
 
-    //stream << "LOL";
+    stream.open(QIODevice::WriteOnly);
     foreach(Shape *s, wgt->mylist)
     {
-        stream.push_back(s->Serialize());
+        seria.serialize(s, &stream);
+    }
+    stream.close();
+
+
+    stream.open(QIODevice::ReadOnly);
+    while (!stream.atEnd())
+    {
+        Shape *tmp = seria.deserialize(stream);
     }
 
-    foreach(QString a, stream)
-        qDebug() << a;
-
+    qDebug() << "SUCCESS!";
 }
