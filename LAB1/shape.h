@@ -6,6 +6,8 @@
 #include <QString>
 #include <QWidget>
 
+#include <QDebug>
+
 class Shape;
 
 class Shape : public QObject
@@ -20,7 +22,7 @@ public:
     virtual ~Shape() {}
 
     virtual void drawMySelf(QPainter *);
-    virtual void initDefault(QPoint);
+    virtual void initDefault();
 
     static int def;
     static int extraNum;

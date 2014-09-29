@@ -53,16 +53,35 @@ void MainWindow::on_actionSave_triggered()
     stream.open(QIODevice::WriteOnly);
     foreach(Shape *s, wgt->mylist)
     {
-        seria.serialize(s, &stream);
+        seria.serialize(s);
+    }
+    seria.save(&stream);
+    stream.close();
+
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    QFile stream("lol.xml");
+    Serializer seria;
+
+    stream.open(QIODevice::ReadOnly);
+    QDomDocument doc;
+
+    doc.setContent(&stream);
+    QDomNodeList nList = doc.documentElement().childNodes();
+
+    for (int i = 0; i < nList.count(); i++)
+    {
+        Shape *tmp = NULL;
+
+        qDebug() << "TEST:" << nList.item(i).childNodes().count();
+        seria._deserialize(nList.item(i).toElement(), (QObject **)&tmp);
+        tmp->initDefault();
+
+        wgt->mylist.push_back(tmp);
     }
     stream.close();
 
-
-    stream.open(QIODevice::ReadOnly);
-    while (!stream.atEnd())
-    {
-        Shape *tmp = seria.deserialize(stream);
-    }
-
-    qDebug() << "SUCCESS!";
+    wgt->update();
 }

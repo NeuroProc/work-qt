@@ -21,9 +21,9 @@ void Ellipse::drawMySelf(QPainter *painter)
     painter->drawEllipse(this->center, this->rx, this->ry);
 }
 
-void Ellipse::initDefault(QPoint xy)
+void Ellipse::initDefault()
 {
-    center = xy;
+    center = QPoint(x(), y());
     rx = def;
     ry = def;
 }

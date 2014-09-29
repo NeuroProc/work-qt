@@ -19,7 +19,7 @@ public:
     Line(QPoint);
 
     void drawMySelf(QPainter *);
-    void initDefault(QPoint);
+    void initDefault();
 };
 
 #endif // LINE_H

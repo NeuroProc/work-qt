@@ -8,10 +8,11 @@ int Shape::def = 100;
 
 void Shape::drawMySelf(QPainter *)
 {
+    qDebug() << "SHAPE PAINT";
     return;
 }
 
-void Shape::initDefault(QPoint)
+void Shape::initDefault()
 {
     return;
 }

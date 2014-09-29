@@ -20,8 +20,8 @@ void Line::drawMySelf(QPainter *painter)
     painter->drawLine(this->A, this->B);
 }
 
-void Line::initDefault(QPoint xy)
+void Line::initDefault()
 {
-    A = xy;
-    B = QPoint(xy.x() + def, xy.y() + def);
+    A = QPoint(x(), y());
+    B = QPoint(x() + def, y() + def);
 }

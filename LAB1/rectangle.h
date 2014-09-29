@@ -19,7 +19,7 @@ public:
     Rectangle(QPoint);
 
     void drawMySelf(QPainter *);
-    void initDefault(QPoint);
+    void initDefault();
 };
 
 #endif // RECTANGLE_H

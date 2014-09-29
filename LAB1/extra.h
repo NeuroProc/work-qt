@@ -20,7 +20,7 @@ public:
     //Extra(QVector<QPoint> *);
 
     void drawMySelf(QPainter *);
-    void initDefault(QPoint);
+    void initDefault();
 
     int num() { return extraNum; }
     void setNum(const int num) { extraNum = num; }

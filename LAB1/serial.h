@@ -11,18 +11,15 @@ class Serializer;
 class Serializer
 {
 public:
-    bool serialize(QObject *object, QIODevice *output);
-    bool _deserialize(QIODevice *input, QObject *object);
+    Serializer();
+    bool serialize(QObject *object);
+    bool _deserialize(QDomElement root, QObject **object);
 
-    template<class T>
-    T * deserialize(QIODevice *input)
-    {
-        T* object = new T();
-        if(_deserialize(input, object))
-            return object;
-        delete object;
-        return NULL;
-    }
+    bool save(QIODevice *output);
+
+private:
+    QDomDocument doc;
+    QDomElement rootDoc;
 };
 
 #endif // SERIAL_H

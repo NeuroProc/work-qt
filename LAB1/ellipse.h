@@ -20,7 +20,7 @@ public:
     Ellipse(QPoint);
 
     void drawMySelf(QPainter *);
-    void initDefault(QPoint);
+    void initDefault();
 };
 
 #endif // ELLIPSE_H

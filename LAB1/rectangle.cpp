@@ -20,9 +20,9 @@ void Rectangle::drawMySelf(QPainter *painter)
     painter->drawRect(this->A.x(), this->A.y(), this->B.x(), this->B.y());
 }
 
-void Rectangle::initDefault(QPoint xy)
+void Rectangle::initDefault()
 {
-    A = xy;
+    A = QPoint(x(), y());
     B = QPoint(def, def);
 }
 

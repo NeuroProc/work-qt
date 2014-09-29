@@ -34,11 +34,9 @@ void QPaintWidget::mousePressEvent(QMouseEvent *)
         QPoint pos = this->mapFromGlobal(QCursor::pos());
 
         Shape *s = (Shape *)QMetaType::construct(id);
-        s->initDefault(pos);
         s->setProperty("x", pos.x());
         s->setProperty("y", pos.y());
-
-        qDebug() << s->property("point");
+        s->initDefault();
 
         mylist.push_back(s);
     }

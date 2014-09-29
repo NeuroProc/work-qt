@@ -28,6 +28,8 @@ private slots:
     void on_pushButton_clicked();
     void on_actionSave_triggered();
 
+    void on_actionOpen_triggered();
+
 private:
     Ui::MainWindow *ui;
     QPaintWidget *wgt;
