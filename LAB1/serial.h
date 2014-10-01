@@ -5,6 +5,8 @@
 #include <QMetaProperty>
 #include <QMetaObject>
 #include <QDomDocument>
+#include <QFile>
+#include <QTextStream>
 
 class Serializer;
 

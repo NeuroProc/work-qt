@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QFile>
+#include <QFileDialog>
+#include <QLibrary>
 #include "draw.h"
 #include "line.h"
 #include "serial.h"
@@ -29,6 +31,8 @@ private slots:
     void on_actionSave_triggered();
 
     void on_actionOpen_triggered();
+
+    void on_actionLoad_triggered();
 
 private:
     Ui::MainWindow *ui;

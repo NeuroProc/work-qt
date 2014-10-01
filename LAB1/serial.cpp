@@ -1,11 +1,5 @@
 #include "serial.h"
 
-#include <QDebug>
-
-#include <QPoint>
-#include <QBitArray>
-#include <QFile>
-
 Serializer::Serializer()
 {
     rootDoc = doc.createElement("Collection");
@@ -19,14 +13,13 @@ bool Serializer::save(QIODevice *output)
     QTextStream stream(output);
     doc.save(stream, 2);
 
-    qDebug() << doc.toString();
+    //qDebug() << doc.toString();
 
     return true;
 }
 
 bool Serializer::serialize(QObject *object)
 {
-    //QDomDocument doc;
     QDomElement root = doc.createElement(object->metaObject()->className());
     rootDoc.appendChild(root);
 
@@ -48,11 +41,8 @@ bool Serializer::serialize(QObject *object)
 
 bool Serializer::_deserialize(QDomElement root, QObject** object)
 {
-    int id;
-    if ((id = QMetaType::type(root.nodeName().toAscii().data())))
+    if (int id = QMetaType::type(root.nodeName().toAscii().data()))
         *object = (QObject*)QMetaType::construct(id);
-
-    //qDebug() << "ID: " << id << "OBJ: " << object;
 
     for(int i = 0; i < (*object)->metaObject()->propertyCount(); i++)
     {
@@ -64,7 +54,6 @@ bool Serializer::_deserialize(QDomElement root, QObject** object)
         if(nodeList.length() < 1)
             continue;
         QDomNode node = nodeList.at(0);
-        //QVariant value = object->property(propName.toAscii().data());
         QString v = node.toElement().text();
         (*object)->setProperty(propName.toAscii().data(), QVariant(v));
     }

@@ -5,7 +5,6 @@
 #include <QPainter>
 #include <QString>
 #include <QWidget>
-
 #include <QDebug>
 
 class Shape;

@@ -94,6 +94,7 @@
     </property>
     <addaction name="actionSave"/>
     <addaction name="actionOpen"/>
+    <addaction name="actionLoad"/>
    </widget>
    <widget class="QMenu" name="menuDraw">
     <property name="autoFillBackground">
@@ -156,6 +157,11 @@
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+  </action>
+  <action name="actionLoad">
+   <property name="text">
+    <string>Load</string>
    </property>
   </action>
  </widget>

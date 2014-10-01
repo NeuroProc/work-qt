@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = LAB1
 TEMPLATE = app
 
+INCLUDEPATH += ../trapezium/
+#LIBS += ./libtrapezium/trapezium
 
 SOURCES += main.cpp\
         mainwindow.cpp \

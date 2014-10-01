@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget *parent) :
     wgt->current = "Line";
 
     connect(ui->menuDraw, SIGNAL(triggered(QAction*)), this, SLOT(setCurrentAction(QAction*)));
+
+    QLibrary lib;
+    lib.metaObject()->className();
 }
 
 MainWindow::~MainWindow()
@@ -47,7 +50,8 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QFile stream("lol.xml");
+
+    QFile stream(QFileDialog::getSaveFileName(this, "Save file", "", ""));
     Serializer seria;
 
     stream.open(QIODevice::WriteOnly);
@@ -62,7 +66,7 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QFile stream("lol.xml");
+    QFile stream(QFileDialog::getOpenFileName(this, "Open file", "", ""));
     Serializer seria;
 
     stream.open(QIODevice::ReadOnly);
@@ -75,13 +79,24 @@ void MainWindow::on_actionOpen_triggered()
     {
         Shape *tmp = NULL;
 
-        qDebug() << "TEST:" << nList.item(i).childNodes().count();
         seria._deserialize(nList.item(i).toElement(), (QObject **)&tmp);
-        tmp->initDefault();
 
+        tmp->initDefault();
         wgt->mylist.push_back(tmp);
     }
     stream.close();
 
     wgt->update();
+}
+
+void MainWindow::on_actionLoad_triggered()
+{
+    QLibrary lib(QFileDialog::getOpenFileName(this, "Open file", "", ""));
+
+    if (lib.load())
+        qDebug() << lib.metaObject()->className();
+    qDebug() << lib.errorString();
+
+
+
 }
