@@ -13,12 +13,12 @@ DEFINES += TRAPEZIUM_LIBRARY
 #INCLUDEPATH += ../LAB1/
 
 SOURCES += trapezium.cpp\
-            ../LAB1/shape.cpp
+            shape.cpp
 
 
 HEADERS += trapezium.h\
         trapezium_global.h\
-        ../LAB1/shape.h
+        shape.h
 
 unix:!symbian {
     maemo5 {

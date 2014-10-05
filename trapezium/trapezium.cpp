@@ -2,6 +2,11 @@
 
 int Trapezium::id = qRegisterMetaType<Trapezium>();
 
+int getId()
+{
+    return Trapezium::id;
+}
+
 Trapezium::Trapezium()
 {
 }
