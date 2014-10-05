@@ -79,7 +79,8 @@ void MainWindow::on_actionOpen_triggered()
     {
         Shape *tmp = NULL;
 
-        seria._deserialize(nList.item(i).toElement(), (QObject **)&tmp);
+        if (!seria._deserialize(nList.item(i).toElement(), (QObject **)&tmp))
+            continue;
 
         tmp->initDefault();
         wgt->mylist.push_back(tmp);
@@ -93,10 +94,17 @@ void MainWindow::on_actionLoad_triggered()
 {
     QLibrary lib(QFileDialog::getOpenFileName(this, "Open file", "", ""));
 
-    if (lib.load())
-        qDebug() << lib.metaObject()->className();
-    qDebug() << lib.errorString();
+    if (!lib.load())
+        qDebug() << lib.errorString();
 
+    typedef int (*myid)();
+    myid avg = (myid)lib.resolve("getId");
+    if (avg)
+        qDebug() << avg();
+    else
+        qDebug() << lib.errorString();
+
+    ui->menuDraw->addAction(QMetaType::typeName(avg()));
 
 
 }

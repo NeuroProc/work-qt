@@ -14,16 +14,17 @@ class Extra : public Shape
     Q_PROPERTY(int num READ num WRITE setNum)
 private:
     static int id;
+    int mNum;
 
 public:
-    Extra() {}
+    Extra() { setNum(extraNum); }
     //Extra(QVector<QPoint> *);
 
     void drawMySelf(QPainter *);
     void initDefault();
 
-    int num() { return extraNum; }
-    void setNum(const int num) { extraNum = num; }
+    int num() { return mNum; }
+    void setNum(const int num) { mNum = num; }
 
     QVector<QPoint> points;
 };

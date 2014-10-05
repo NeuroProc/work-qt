@@ -43,6 +43,8 @@ bool Serializer::_deserialize(QDomElement root, QObject** object)
 {
     if (int id = QMetaType::type(root.nodeName().toAscii().data()))
         *object = (QObject*)QMetaType::construct(id);
+    else
+        return false;
 
     for(int i = 0; i < (*object)->metaObject()->propertyCount(); i++)
     {
@@ -56,6 +58,7 @@ bool Serializer::_deserialize(QDomElement root, QObject** object)
         QDomNode node = nodeList.at(0);
         QString v = node.toElement().text();
         (*object)->setProperty(propName.toAscii().data(), QVariant(v));
+        qDebug() << propName << " = " << v;
     }
     return true;
 }

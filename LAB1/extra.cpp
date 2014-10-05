@@ -10,10 +10,10 @@ void Extra::drawMySelf(QPainter *painter)
 
 void Extra::initDefault()
 {
-   for (int i = 0; i < extraNum; i++)
+   for (int i = 0; i < mNum; i++)
    {
-       points.push_back(QPoint(x() + static_cast<int>(def * qCos(2 * i * M_PI / extraNum)),
-                               y() + static_cast<int>(def * qSin(2 * i * M_PI/ extraNum))));
+       points.push_back(QPoint(x() + static_cast<int>(def * qCos(2 * i * M_PI / mNum)),
+                               y() + static_cast<int>(def * qSin(2 * i * M_PI/ mNum))));
    }
    points.push_back(QPoint(points.value(0).x(), points.value(0).y()));
 }
