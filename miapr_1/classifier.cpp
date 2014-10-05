@@ -6,13 +6,13 @@ struct Classifier::pointInf
     QPoint p;
 };
 
-Classifier::Classifier(long numP, long numC, QWidget * parent, Draw * dr)
+Classifier::Classifier(int numP, int numC, QWidget * parent, Draw * dr)
 {
     numPoint = numP;
     numClass = numC;
 
     vect = new pointInf[numPoint];
-    cores = new long[numClass];
+    cores = new int[numClass];
     colors = new uint[numClass];
 
     d = dr;
@@ -36,15 +36,15 @@ Classifier::~Classifier()
 
 bool Classifier::reCompute()
 {
-    QHash<long, QVector<long> *> hash;
+    QHash<int, QVector<int> *> hash;
     QThreadPool pool(this);
 
     globalFlag = false;
 
-    for (long i = 0; i < numPoint; i++)
+    for (int i = 0; i < numPoint; i++)
     {
         if (!hash.contains(vect[i].c))
-             hash.insert(vect[i].c, new QVector<long>);
+             hash.insert(vect[i].c, new QVector<int>);
 
         hash[vect[i].c]->push_back(i);
     }
@@ -53,7 +53,7 @@ bool Classifier::reCompute()
 
     pool.setMaxThreadCount(numClass);
 
-    foreach (long i, hash.keys())
+    foreach (int i, hash.keys())
         pool.start(new getMinC(this, hash[i], i));
 
     pool.waitForDone();
@@ -62,18 +62,18 @@ bool Classifier::reCompute()
     return globalFlag;
 }
 
-long Classifier::getMin(QVector<long> *tmp)
+int Classifier::getMin(QVector<int> *tmp)
 {
     double minSum = -1;
     double sum;
-    long min;
+    int min;
 
 
-    for (long j = 0; j < tmp->size(); j++)
+    for (int j = 0; j < tmp->size(); j++)
     {
         sum = 0;
 
-        for (long k = 0; k < tmp->size(); k++)
+        for (int k = 0; k < tmp->size(); k++)
         {
             if (j == k)
                 continue;
@@ -100,14 +100,14 @@ double Classifier::getDistance(int ax, int ay, int bx, int by)
 void Classifier::classify()
 {
     double min, tmp;
-    long minIndex;
+    int minIndex;
 
-    for (long i = 0; i < numPoint; i++)
+    for (int i = 0; i < numPoint; i++)
     {
         min = 0;
         minIndex = -1;
 
-        for (long j = 0; j < numClass; j++)
+        for (int j = 0; j < numClass; j++)
         {
             if (( tmp = getDistance(vect[ i ].p.x(), vect[ i ].p.y(), vect[ cores[j] ].p.x(), vect[ cores[j] ].p.y()) ) < min || minIndex < 0)
             {
@@ -125,9 +125,9 @@ void Classifier::classify()
 
 void Classifier::getRandomCores()
 {
-    long target = 0;
+    int target = 0;
 
-    for (long i = 0; i < numClass; i++)
+    for (int i = 0; i < numClass; i++)
     {
         while (vect[ (target = qrand() % numPoint) ].c == -1)
             ;
@@ -137,12 +137,12 @@ void Classifier::getRandomCores()
     }
 }
 
-long Classifier::getCore(long i)
+int Classifier::getCore(int i)
 {
     return cores[i];
 }
 
-void Classifier::setCore(long i, long value)
+void Classifier::setCore(int i, int value)
 {
     cores[i] = value;
 }
@@ -154,14 +154,14 @@ void Classifier::setGlobalFlag(bool value)
 
 void Classifier::setRandomVect(int x, int y)
 {   
-    for (long i = 0; i < numPoint; i++)
+    for (int i = 0; i < numPoint; i++)
     {
         vect[i].p = QPoint(qrand() % x, qrand() % y);
         vect[i].c = 0;
     }
 }
 
-getMinC::getMinC(Classifier * parent, QVector<long> *t, long key)
+getMinC::getMinC(Classifier * parent, QVector<int> *t, int key)
 {
     p = parent;
     tmp = t;
@@ -170,7 +170,7 @@ getMinC::getMinC(Classifier * parent, QVector<long> *t, long key)
 
 void getMinC::run()
 {
-    long min;
+    int min;
     min = p->getMin(tmp);
 
     if (p->getCore(k) != min)

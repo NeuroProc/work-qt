@@ -18,12 +18,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    long numP, numC;
+    int numP, numC;
 
     try
     {
-        numP = ui->lineEdit_2->text().toLong();
-        numC = ui->lineEdit_3->text().toLong();
+        numP = ui->lineEdit_2->text().toInt();
+        numC = ui->lineEdit_3->text().toInt();
 
     }
     catch (...)

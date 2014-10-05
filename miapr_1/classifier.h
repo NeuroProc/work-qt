@@ -16,7 +16,7 @@ class Classifier : public QObject
    Q_OBJECT
 
 public:
-    explicit Classifier(long, long, QWidget *parent = 0, Draw *dr = 0);
+    explicit Classifier(int, int, QWidget *parent = 0, Draw *dr = 0);
     ~Classifier();
 
     void setRandomVect(int, int);
@@ -26,10 +26,10 @@ public:
     bool reCompute();
 
     double getDistance(int, int, int, int);
-    long getMin(QVector<long> *);
+    int getMin(QVector<int> *);
 
-    long getCore(long);
-    void setCore(long, long);
+    int getCore(int);
+    void setCore(int, int);
 
     void setGlobalFlag(bool);
 
@@ -41,11 +41,11 @@ private:
     QWidget *p;
     QMutex mutex;
 
-    long numPoint;
-    long numClass;
+    int numPoint;
+    int numClass;
     bool globalFlag;
 
-    long *cores;
+    int *cores;
     pointInf *vect;
     uint *colors;
 };
@@ -53,13 +53,13 @@ private:
 class getMinC : public QRunnable
 {
 public:
-    getMinC(Classifier * parent = 0, QVector<long> * t = 0, long key = -1);
+    getMinC(Classifier * parent = 0, QVector<int> * t = 0, int key = -1);
     void run();
 
 private:
-    long k;
+    int k;
     Classifier *p;
-    QVector<long> *tmp;
+    QVector<int> *tmp;
 
 };
 
