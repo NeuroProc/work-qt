@@ -55,12 +55,15 @@ void MainWindow::on_pushButton_clicked()
         delay(1);
     }
 
+    obj->drawCores();
     qDebug() << "maximin has ended!";
+    dr->wgt->update();
+    delay(5);
 
     a.setText("MAXIMIN HAS FINISHED. run Kmeans?");
     a.exec();
 
-    delay(1);
+    delay(5);
 
     while (obj->reCompute())
     {
@@ -68,6 +71,11 @@ void MainWindow::on_pushButton_clicked()
         obj->classify();
         delay(1);
         qDebug("REDRAW!");
+
+        obj->drawCores();
+        dr->wgt->update();
+        delay(1);
+
     }
     qDebug("FINISH!");
 

@@ -34,6 +34,13 @@ void Draw::drawPixel(int x, int y, uint c)
     painter.end();
 }
 
+void Draw::drawCore(int x, int y, uint c)
+{
+    painter.begin(img);
+    painter.fillRect(QRect(x, y, 15, 15), QBrush(c));
+    painter.end();
+}
+
 void Draw::eraseImage()
 {
     wgt->hide();

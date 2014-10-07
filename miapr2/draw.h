@@ -14,8 +14,12 @@ public:
     Draw(int, int, QWidget * parent = 0);
     ~Draw();
     QImage * getImg();
+
     void drawPixel(int, int, uint);
+    void drawCore(int, int, uint);
+
     void eraseImage();
+
     QPaintWidget * wgt;
 
 private:

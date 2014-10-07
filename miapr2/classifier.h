@@ -36,6 +36,8 @@ public:
 
     void setGlobalFlag(bool);
 
+    void drawCores();
+
 private:
 
     struct pointInf;

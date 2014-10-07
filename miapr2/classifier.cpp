@@ -18,7 +18,7 @@ Classifier::Classifier(int numP, int numC, QWidget * parent, Draw * dr)
     d = dr;
     p = parent;
 
-    setRandomVect(parent->width(), parent->height());
+    setRandomVect(parent->width() - 10, parent->height() - 10);
 }
 
 Classifier::~Classifier()
@@ -29,6 +29,14 @@ Classifier::~Classifier()
     //delete[] colors;
 }
 
+void Classifier::drawCores()
+{
+    for (int i = 0; i < numClass; i++)
+    {
+        d->drawCore(vect[ cores[i] ].p.x(), vect[ cores[i] ].p.y(), Qt::red);
+    }
+}
+
 double Classifier::maximin(int *newCore)
 {
     double maxDist = -1;
@@ -36,6 +44,9 @@ double Classifier::maximin(int *newCore)
 
     for (int i = 0; i < numPoint; i++)
     {
+        if (cores.contains(i))
+            continue;
+
         curDist = getDistance(vect[i].p.x(), vect[i].p.y(), vect[ cores[vect[i].c] ].p.x(), vect[ cores[vect[i].c] ].p.y());
         if ( curDist > maxDist )
         {
@@ -44,22 +55,30 @@ double Classifier::maximin(int *newCore)
         }
     }
 
+    qDebug() << "MAXDIST: " << maxDist;
     return maxDist;
 }
 
 double Classifier::getAverageDistance()
 {
     double resSum = 0;
+    int counter = 0;
 
     for (int i = 0; i < numClass; i++)
     {
+        counter += numClass - i - 1;
         for (int j = i + 1; j < numClass; j++)
         {
             resSum += getDistance(vect[ cores[i] ].p.x(), vect[ cores[i] ].p.y(), vect[ cores[j] ].p.x(), vect[ cores[j] ].p.y());
         }
     }
 
-    return (resSum / numClass);
+    if (counter == 0)
+        counter++;
+
+    qDebug() << "RESSUM: " << resSum << " RES: " << resSum / (numClass * 2);
+    qDebug() << "COUNTER: " << counter << " NUMCLASSES: " << numClass;
+    return (resSum / counter);
 }
 
 bool Classifier::reCompute()
@@ -177,6 +196,7 @@ void Classifier::setRandomCore()
 
 void Classifier::pushCore(int value)
 {
+    //vect[value].c = -1;
     cores.push_back(value);
     colors.push_back(qRgb(qrand() % 255, qrand() % 255, qrand() % 255));
 }
