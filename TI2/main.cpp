@@ -6,13 +6,14 @@
 
 using namespace std;
 
-u_long LSFSR(FILE *, FILE *);
-u_long GEFFE(FILE *C, FILE *M);
-u_long RC4(FILE *C, FILE *M);
+u_long LSFSR(FILE *C, FILE *M, FILE *K);
+u_long GEFFE(FILE *C, FILE *M, FILE *K);
+u_long RC4(FILE *C, FILE *M, FILE *K);
 void swapChar(char &, char &);
 
 int main(int argc, char *argv[])
 {
+/*
     if( argc < 41 )
     {
         cout << "incorrect data" << endl;
@@ -23,34 +24,47 @@ int main(int argc, char *argv[])
     M = fopen(argv[1], "r");
     C = fopen(argv[2], "w");
     K = fopen(argv[3], "w");
+*/
+    /* TEST SECTION */
+    FILE *C, *M, *K;
+    M = fopen("input.txt", "r");
+    C = fopen("output", "w");
+    K = fopen("key.txt", "w");
 
+    cout << system("pwd") << endl;
+    /* END */
 
     int numb;
-    std::bitset<sizeof(u_long) * 8> key;
+    std::bitset<sizeof(u_long) * 8> endState;
 
     cout << "1 - LSFSR" << endl << "2 - GEFFE" << endl << "3 - RC4"  << endl <<  "Enter crypto algorithm: ";
     cin >> numb;
 
+    /* TEST SECTION */
+    numb = 1;
+    /* END */
+
     switch (numb)
     {
     case 1:
-        key = LSFSR(C, M);
+        endState = LSFSR(C, M, K);
         break;
     case 2:
-        key = GEFFE(C, M);
+        endState = GEFFE(C, M, K);
         break;
     case 3:
-        key = RC4(C, M);
+        endState = RC4(C, M, K);
         break;
     default:
         break;
     }
 
     //std::bitset<sizeof(u_long) * 8> key(LSFSR(C, M));
-    fprintf(K, "%s\n", key.to_string().data());
+    fprintf(K, "%s\n", endState.to_string().data());
 
     fclose(C);
     fclose(M);
+    fclose(K);
 
     return 0;
 }
@@ -76,6 +90,11 @@ u_long LSFSR(FILE *C, FILE *M)
     std::bitset<25> key;
     cout << "Enter start register: ";
     cin >> key;
+
+    /* TEST SECTION */
+    key = 1;
+    /* END */
+
     cout << "U KEY: " << key << endl;
 
     K = (char)key.to_ulong();
