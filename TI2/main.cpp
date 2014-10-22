@@ -25,27 +25,11 @@ int main(int argc, char *argv[])
     C = fopen(argv[2], "w");
     K = fopen(argv[3], "w");
 
-
-    /* TEST SECTION */
-    /*
-    FILE *C, *M, *K;
-    M = fopen("input.txt", "r");
-    C = fopen("output", "w");
-    K = fopen("key.txt", "w");
-
-    cout << system("pwd") << endl;
-    */
-    /* END */
-
     int numb;
     std::bitset<sizeof(u_long) * 8> endState;
 
     cout << "1 - LSFSR" << endl << "2 - GEFFE" << endl << "3 - RC4"  << endl <<  "Enter crypto algorithm: ";
     cin >> numb;
-
-    /* TEST SECTION */
-    //numb = 1;
-    /* END */
 
     switch (numb)
     {
@@ -63,7 +47,7 @@ int main(int argc, char *argv[])
     }
 
     //std::bitset<sizeof(u_long) * 8> key(LSFSR(C, M));
-    fprintf(K, "%s\n", endState.to_string().data());
+    //fprintf(K, "%s\n", endState.to_string().data());
 
     fclose(C);
     fclose(M);
@@ -94,11 +78,7 @@ u_long LSFSR(FILE *C, FILE *M, FILE *Kf)
     cout << "Enter start register: ";
     cin >> key;
 
-    /* TEST SECTION */
-    //key = 1;
-    /* END */
-
-    cout << "U KEY: " << key << endl;
+    cout << "U REG: " << key << endl;
 
     K = (char)key.to_ulong();
 
@@ -108,9 +88,11 @@ u_long LSFSR(FILE *C, FILE *M, FILE *Kf)
     while( !feof(M) )
     {
         char outputsymbol = K ^ inputsymbol;
-        fputc(outputsymbol, C );
-        u_long temp = 0;
 
+        fputc(outputsymbol, C );
+        fputc(K, Kf);
+
+        u_long temp = 0;
         if( longK & x25 )
             temp = temp ^ (u_long)1;
         if( longK & x3 )
@@ -180,20 +162,21 @@ u_long GEFFE(FILE *C, FILE *M, FILE *Kf)
     cout << "Enter start register N3: ";
     cin >> key3;
 
-    cout << "U KEY1: " << key1 << endl;
-    cout << "U KEY2: " << key2 << endl;
-    cout << "U KEY3: " << key3 << endl;
+    cout << "U REG1: " << key1 << endl;
+    cout << "U REG2: " << key2 << endl;
+    cout << "U REG3: " << key3 << endl;
 
     K1 = (char)key1.to_ulong();
     K2 = (char)key2.to_ulong();
     K3 = (char)key3.to_ulong();
 
     char inputsymbol = fgetc(M);
-    Kg = (K1 & K2) | !(K1 & K3);
-    longKg = (longK1 & longK2) | !( longK1 & longK3 );
+    Kg = (K1 & K2) | ~(K1 & K3);
+    longKg = (longK1 & longK2) | ~( longK1 & longK3 );
     while( !feof(M) )
     {
      fputc( (Kg ^ inputsymbol), C );
+     fputc(Kg, Kf);
 
      u_long temp = 0;
      if( longK1 & x25 )
@@ -228,8 +211,9 @@ u_long GEFFE(FILE *C, FILE *M, FILE *Kf)
      if( temp == 1 )
          K3 = K3 | (char)1;
 
-     Kg = (K1 & K2) | !(K1 & K3);
-     longKg = (longK1 & longK2) | !( longK1 & longK3 );
+     Kg = (K1 & K2) | ~(K1 & K3);
+     longKg = (longK1 & longK2) | ~( longK1 & longK3 );
+
      inputsymbol = fgetc(M);
     }
     return (u_long)Kg;
@@ -257,13 +241,6 @@ u_long RC4(FILE *C, FILE *M, FILE *Kf)
     j = 0;
     char currentKey;
 
-
-    //char *outputText =  (char*)calloc(size, 1);
-/*
-    fseek(M, 0, SEEK_END);
-    u_long size = ftell(M);
-    fseek(M, 0, SEEK_SET);
-*/
     char symbol = fgetc(M);
     while (!feof(M))
     {
