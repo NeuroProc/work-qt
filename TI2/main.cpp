@@ -6,15 +6,15 @@
 
 using namespace std;
 
-u_long LSFSR(FILE *C, FILE *M, FILE *K);
-u_long GEFFE(FILE *C, FILE *M, FILE *K);
-u_long RC4(FILE *C, FILE *M, FILE *K);
+u_long LSFSR(FILE *C, FILE *M, FILE *Kf);
+u_long GEFFE(FILE *C, FILE *M, FILE *Kf);
+u_long RC4(FILE *C, FILE *M, FILE *Kf);
 void swapChar(char &, char &);
 
 int main(int argc, char *argv[])
 {
-/*
-    if( argc < 41 )
+
+    if( argc < 4 )
     {
         cout << "incorrect data" << endl;
         return -1;
@@ -24,14 +24,17 @@ int main(int argc, char *argv[])
     M = fopen(argv[1], "r");
     C = fopen(argv[2], "w");
     K = fopen(argv[3], "w");
-*/
+
+
     /* TEST SECTION */
+    /*
     FILE *C, *M, *K;
     M = fopen("input.txt", "r");
     C = fopen("output", "w");
     K = fopen("key.txt", "w");
 
     cout << system("pwd") << endl;
+    */
     /* END */
 
     int numb;
@@ -41,7 +44,7 @@ int main(int argc, char *argv[])
     cin >> numb;
 
     /* TEST SECTION */
-    numb = 1;
+    //numb = 1;
     /* END */
 
     switch (numb)
@@ -69,7 +72,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-u_long LSFSR(FILE *C, FILE *M)
+u_long LSFSR(FILE *C, FILE *M, FILE *Kf)
 {
     char K;
     u_long x25, x3, x0;
@@ -92,7 +95,7 @@ u_long LSFSR(FILE *C, FILE *M)
     cin >> key;
 
     /* TEST SECTION */
-    key = 1;
+    //key = 1;
     /* END */
 
     cout << "U KEY: " << key << endl;
@@ -106,7 +109,7 @@ u_long LSFSR(FILE *C, FILE *M)
     {
         char outputsymbol = K ^ inputsymbol;
         fputc(outputsymbol, C );
-        u_long temp = 1;
+        u_long temp = 0;
 
         if( longK & x25 )
             temp = temp ^ (u_long)1;
@@ -125,7 +128,7 @@ u_long LSFSR(FILE *C, FILE *M)
     return (u_long)K;
 }
 
-u_long GEFFE(FILE *C, FILE *M)
+u_long GEFFE(FILE *C, FILE *M, FILE *Kf)
 {
     char K1, K2, K3, Kg;
     u_long x25, x3, x0, x33, x13, x23, x5;
@@ -192,7 +195,7 @@ u_long GEFFE(FILE *C, FILE *M)
     {
      fputc( (Kg ^ inputsymbol), C );
 
-     u_long temp = 1;
+     u_long temp = 0;
      if( longK1 & x25 )
          temp = temp ^ (u_long)1;
      if( longK1 & x3 )
@@ -203,7 +206,7 @@ u_long GEFFE(FILE *C, FILE *M)
      if( temp == 1 )
          K1 = K1 | (char)1;
 
-     temp = 1;
+     temp = 0;
      if( longK2 & x33 )
          temp = temp ^ (u_long)1;
      if( longK2 & x13 )
@@ -214,7 +217,7 @@ u_long GEFFE(FILE *C, FILE *M)
      if( temp == 1 )
          K2 = K2 | (char)1;
 
-     temp = 1;
+     temp = 0;
      if( longK3 & x23 )
          temp = temp ^ (u_long)1;
      if( longK3 & x5 )
@@ -232,7 +235,7 @@ u_long GEFFE(FILE *C, FILE *M)
     return (u_long)Kg;
 }
 
-u_long RC4(FILE *C, FILE *M)
+u_long RC4(FILE *C, FILE *M, FILE *Kf)
 {
     char userkey[100];
     char Sbox[256];
@@ -261,41 +264,24 @@ u_long RC4(FILE *C, FILE *M)
     u_long size = ftell(M);
     fseek(M, 0, SEEK_SET);
 */
-    char symbol;
+    char symbol = fgetc(M);
     while (!feof(M))
     {
-        symbol = fgetc(M);
         count++;
 
         i = (i+1) % 256;
         j = (j+(unsigned char)Sbox[i]) % 256;
         swapChar(Sbox[i], Sbox[j]);
         currentKey = Sbox[ ( (unsigned char)Sbox[i] + (unsigned char)Sbox[j] ) % 256 ];
+
         char newsym = (currentKey ^ symbol);
-        //cout<< symbol << " " << currentKey << " " << newsym << "\n";
 
-        /*fwrite(&symbol, sizeof(char), 1, C);
-        char probel = ' ';
-        char slazhn = '\n';
-        fwrite(&probel, sizeof(char), 1, C);
-        fwrite(&currentKey, sizeof(char), 1, C);
-        fwrite(&probel, sizeof(char), 1, C);*/
-
-        //fwrite(&newsym, sizeof(char), 1, C);
-
-        //outputText[ii] = newsym;
         fputc(newsym, C);
 
-        //fwrite(&slazhn, sizeof(char), 1, C);*/
+        symbol = fgetc(M);
     }
-    //fwrite(outputText, sizeof(char), size, C);
-    //fflush(C);
-    //fflush(M);
-    //fclose(M);
-    //fclose(C);
     cout << count << endl;
-    //CloseHandle(hFile);
-    //GlobalFree(szFile);
+
     return count;
 
 }
