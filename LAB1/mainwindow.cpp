@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+1#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 
@@ -100,11 +100,12 @@ void MainWindow::on_actionLoad_triggered()
     typedef int (*myid)();
     myid avg = (myid)lib.resolve("getId");
     if (avg)
+    {
         qDebug() << avg();
+        ui->menuDraw->addAction(QMetaType::typeName(avg()));
+    }
     else
         qDebug() << lib.errorString();
-
-    ui->menuDraw->addAction(QMetaType::typeName(avg()));
 
 
 }
