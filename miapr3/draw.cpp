@@ -62,6 +62,8 @@ Draw::Draw(QWidget *parent)
   vlay->addLayout(hlayout5);
 
 
+  plot->setAxisTitle(QwtPlot::yLeft, "P");
+  plot->setAxisTitle(QwtPlot::xBottom, "X");
 
   QwtPlotPicker *d_picker =
           new QwtPlotPicker(
@@ -119,14 +121,14 @@ void Draw::button_click()
   }
 
   for (i = 0; i < MAXPOINTS; i++) {
-    arr1[i] = qrand()%500 - 100;
+    arr1[i] = qrand()%500 - 100; //генерация случайных опытов
     arr2[i] = qrand()%500 + 100;
   }
 
   mu1 = 0;
   mu2 = 0;
   for (i = 0; i < MAXPOINTS; i++) {
-    mu1 = mu1 + arr1[i];
+    mu1 = mu1 + arr1[i]; //мат ожидание
     mu2 = mu2 + arr2[i];
   }
   mu1 /= MAXPOINTS;
@@ -135,7 +137,7 @@ void Draw::button_click()
   sigm1 = 0;
   sigm2 = 0;
   for (i = 0; i < MAXPOINTS; i++) {
-    sigm1 = sigm1 + qwtSqr(arr1[i] - mu1);
+    sigm1 = sigm1 + qwtSqr(arr1[i] - mu1);  //сигма
     sigm2 = sigm2 + qwtSqr(arr2[i] - mu2);
   }
   sigm1 = qSqrt(sigm1/MAXPOINTS);
