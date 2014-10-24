@@ -24,11 +24,6 @@
          <Option type="1" />
          <Option compiler="gcc" />
          <Compiler>
-            <Add directory="/usr/include" />
-            <Add directory="/usr/include/c++/4.2" />
-            <Add directory="/usr/include/c++/4.2/backward" />
-            <Add directory="/usr/include/c++/v1" />
-            <Add directory="/usr/include/clang/3.3" />
          </Compiler>
          <MakeCommands>
             <Build command="/usr/local/bin/gmake -f &quot;/usr/home/Neuron/work/qt/TI2-build/Makefile&quot;  VERBOSE=1 TI2" />
@@ -44,11 +39,6 @@
          <Option type="1" />
          <Option compiler="gcc" />
          <Compiler>
-            <Add directory="/usr/include" />
-            <Add directory="/usr/include/c++/4.2" />
-            <Add directory="/usr/include/c++/4.2/backward" />
-            <Add directory="/usr/include/c++/v1" />
-            <Add directory="/usr/include/clang/3.3" />
          </Compiler>
          <MakeCommands>
             <Build command="/usr/local/bin/gmake -f &quot;/usr/home/Neuron/work/qt/TI2-build/Makefile&quot;  VERBOSE=1 TI2/fast" />
