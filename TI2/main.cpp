@@ -174,6 +174,7 @@ u_long GEFFE(FILE *C, FILE *M, FILE *Kf)
     Kg = (char)(( (longK1 >> 17) & (longK2 >> 25) ) | ( ~(longK1 >> 17) & (longK3 >> 15) ));
 
     std::bitset<8> keyBin;
+    std::bitset<8> key;
 
     while( !feof(M) )
     {
@@ -221,18 +222,20 @@ u_long GEFFE(FILE *C, FILE *M, FILE *Kf)
             longK3 = longK3 | temp;
 
 
-            std::bitset<64> key;
-            key = longK1 >> 8;
-            cout << "longK1[" << i << "]: " << key << endl;
-            key = longK2 >> 8;
-            cout << "longK2[" << i << "]: " << key << endl;
-            key = longK3 >> 8;
-            cout << "longK3[" << i << "]: " << key << endl << endl;
+            key = longK1 >> 17;
+            cout << "K1: " << key << endl;
+            key = longK2 >> 25;
+            cout << "K2: " << key << endl;
+            key = longK3 >> 15;
+            cout << "K3: " << key << endl;
 
 
         }
 
         Kg = (char)(( (longK1 >> 17) & (longK2 >> 25) ) | ( ~(longK1 >> 17) & (longK3 >> 15) ));
+
+        key = Kg;
+        cout << "MULTIPLEX: " << key << endl << endl;
 
         inputsymbol = fgetc(M);
     }
@@ -255,7 +258,7 @@ u_long RC4(FILE *C, FILE *M, FILE *Kf)
     {
         int symb;
         cin >> symb;
-        userkey += (char)symb;
+        userkey += (unsigned char)symb;
     }
     //cout << userkey << endl;
 
@@ -273,22 +276,25 @@ u_long RC4(FILE *C, FILE *M, FILE *Kf)
 
     int i = 0;
     j = 0;
-    char currentKey;
+    unsigned char currentKey;
 
     char symbol = fgetc(M);
     while (!feof(M))
     {
         count++;
 
+
         i = (i+1) % 256;
         j = (j+(unsigned char)Sbox[i]) % 256;
         swapChar(Sbox[i], Sbox[j]);
         currentKey = Sbox[ ( (unsigned char)Sbox[i] + (unsigned char)Sbox[j] ) % 256 ];
 
-        char newsym = (currentKey ^ symbol);
+        unsigned char newsym = (currentKey ^ symbol);
 
         fputc(newsym, C);
         fprintf(Kf, "%d ", (int)((unsigned char)currentKey));
+
+        //cout << (int)(unsigned char)symbol << " : " << (int)(unsigned char)newsym << " : " << (int)(unsigned char)currentKey << endl;
 
         symbol = fgetc(M);
     }
