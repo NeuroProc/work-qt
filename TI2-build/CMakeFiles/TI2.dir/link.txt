@@ -1,1 +1,0 @@
-/usr/bin/CC       CMakeFiles/TI2.dir/main.cpp.o  -o TI2  
