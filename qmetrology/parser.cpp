@@ -14,11 +14,11 @@ Parser::~Parser()
 {
 }
 
-void Parser::setRegEx(string newExp)
+void Parser::setRegEx(string newExp, regex::flag_type flags)
 {
     try
     {
-        exp = newExp;
+        exp.assign(newExp, flags);
     }
     catch (...)
     {
@@ -27,24 +27,51 @@ void Parser::setRegEx(string newExp)
     }
 }
 
-void Parser::replace(string expression, string replacement, string *str)
+string Parser::replace(string expression, string replacement, string target)
 {
+    string *tmp;
+
     setRegEx(expression);
 
-    if (str == 0)
-        str = &source;
+    if (target.empty())
+        tmp = &source;
+    else
+        tmp = &target;
 
-    string tmp;
     try
     {
-        tmp = regex_replace(*str, exp, replacement);
+        *tmp = regex_replace(*tmp, exp, replacement);
     }
     catch (...)
     {
         cout << "ERROR: replace failed." << endl;
-        return;
+        return 0;
     }
-    *str = tmp;
+
+
+    return target;
+}
+
+search_result Parser::search(string expression, string target)
+{
+    setRegEx(expression);
+
+    if (target.empty())
+        target = source;
+
+    search_result res;
+    strreg_it rit, rend;    // start/end regex iterators
+    try
+    {
+        for (rit = strreg_it(target.begin(), target.end(), exp); rit != rend; rit++)
+            res.push_back(*rit);
+    }
+    catch (...)
+    {
+        cout << "ERROR: matching failed." << endl;
+    }
+
+    return res;
 }
 
 string Parser::getSource()
@@ -54,6 +81,6 @@ string Parser::getSource()
 
 void Parser::cleanSource()
 {
-    replace(R"raw((\/\*(\n|.)*?\*\/)|(\/\/.*))raw", "");              //delete comments
-    replace(R"raw(("((\\")|[^"])*")|('((\\')|[^'])*'))raw", "\"\"");  //delete literals
+    replace(R"raw((\/\*(\n|.)*?\*\/)|(\/\/.*))raw", "");            //delete comments
+    replace(R"raw(("((\\")|[^"])*")|('((\\')|[^'])*'))raw", "''");  //delete literals
 }
