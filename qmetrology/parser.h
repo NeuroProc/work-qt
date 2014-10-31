@@ -8,8 +8,7 @@
 
 using namespace std;
 
-typedef regex_iterator<string::const_iterator> strreg_it;
-typedef vector<smatch> search_result;
+typedef vector<vector<string>> search_result;
 
 class Parser
 {
@@ -18,11 +17,13 @@ public:
     ~Parser();
 
     void setRegEx(string newExp, regex::flag_type flags = regex_constants::ECMAScript);
+    bool match(string expression, string target = "");
     string replace(string expression, string replacement, string target = "");
     search_result search(string expression, string target = "");
+    void concatResults(search_result &a, search_result b);
+    void printResults(search_result target);
     string getSource();
     void cleanSource();
-
 private:
     regex exp;
     string source;

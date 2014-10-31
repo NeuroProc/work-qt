@@ -12,6 +12,7 @@ public:
     void calculate();
 private:
     search_result getCtrlStructs();
+    search_result getPredicates(search_result target);
 
     Parser *parse;
 };

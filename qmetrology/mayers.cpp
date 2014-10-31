@@ -11,18 +11,61 @@ Mayers::~Mayers()
 
 void Mayers::calculate()
 {
-    search_result result = getCtrlStructs();
+    search_result control = getCtrlStructs();
+    parse->printResults(control);
 
-    for (u_int i = 0; i < result.size(); i++)
+    search_result predicates = getPredicates(control);
+    parse->printResults(predicates);
+
+    int countPredicates = 0;
+    for (u_int i = 0; i < predicates.size(); i++)
     {
-        for (u_int j = 1; j < result[i].size(); j++)
-            cout << "[" << result[i][j] << "] ";
-        cout << endl << "---------------------------------------" << endl;
+        for (u_int j = 1; j < predicates[i].size(); j++)
+        {
+            if (predicates[i][j].empty())
+                continue;
+
+            if (parse->match(R"raw([_a-zA-Z])raw", predicates[i][j]))
+                countPredicates++;
+        }
     }
+
+    cout << "COUNT PREDICATES: " << countPredicates << endl;
+
+
 
 }
 
 search_result Mayers::getCtrlStructs()
 {
-    return parse->search(R"raw(\b(if|while|for)\s*(\((?:\n|.)*?\))\s*(?=\;|\{|\w))raw");
+    search_result res, tmp;
+
+    tmp = parse->search(R"raw(\b(if|while)\s*\(((?:\n|.)*?)\)\s*(?=\;|\{|\w))raw");             //if/while
+    parse->concatResults(res, tmp);
+
+    tmp = parse->search(R"raw(\b(for)\s*\((?:[^;]*);([^;]*);(?:\n|.)*?\)\s*(?=\;|\{|\w))raw");   //for
+    parse->concatResults(res, tmp);
+
+    tmp = parse->search(R"raw(\b(case)([^:]*):)raw");   //case
+    parse->concatResults(res, tmp);
+
+    return res;
+}
+
+search_result Mayers::getPredicates(search_result target)
+{
+    search_result res, tmp;
+    for (u_int i = 0; i < target.size(); i++)
+    {
+        if (target[i][2] == "")
+        {
+            cout << "WARNING: " << i << "control struct has been skipped. it's hole." << endl;
+            continue;
+        }
+
+        tmp = parse->search(R"raw(^(?:((?:\n|.)*?)(?:\|\||&&|\^\^))|((?:\n|.)*)$)raw", target[i][2]);
+        parse->concatResults(res, tmp);
+    }
+
+    return res;
 }

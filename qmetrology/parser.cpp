@@ -27,6 +27,21 @@ void Parser::setRegEx(string newExp, regex::flag_type flags)
     }
 }
 
+bool Parser::match(string expression, string target)
+{
+    setRegEx(expression);
+
+    if (target.empty())
+        target = source;
+
+    cout << "STR: " << target << endl;
+
+    if (regex_search(target, exp))
+        return true;
+
+    return false;
+}
+
 string Parser::replace(string expression, string replacement, string target)
 {
     string *tmp;
@@ -60,18 +75,34 @@ search_result Parser::search(string expression, string target)
         target = source;
 
     search_result res;
-    strreg_it rit, rend;    // start/end regex iterators
-    try
+    smatch match;
+    while (!target.empty() && regex_search(target, match, exp))
     {
-        for (rit = strreg_it(target.begin(), target.end(), exp); rit != rend; rit++)
-            res.push_back(*rit);
-    }
-    catch (...)
-    {
-        cout << "ERROR: matching failed." << endl;
+        vector<string> tmp;
+        for (string x:match)
+            tmp.push_back(x);
+        res.push_back(tmp);
+        target = match.suffix().str();
+        //cout << "DEBUG: " << target << endl;
     }
 
     return res;
+}
+
+void Parser::concatResults(search_result &a, search_result b)
+{
+    for (u_int i = 0; i < b.size(); i++)
+        a.push_back(b[i]);
+}
+
+void Parser::printResults(search_result target)
+{
+    for (u_int i = 0; i < target.size(); i++)
+    {
+        for (u_int j = 1; j < target[i].size(); j++)
+            cout << "[" << target[i][j] << "] ";
+        cout << endl << "---------------------------------------" << endl;
+    }
 }
 
 string Parser::getSource()
@@ -82,5 +113,6 @@ string Parser::getSource()
 void Parser::cleanSource()
 {
     replace(R"raw((\/\*(\n|.)*?\*\/)|(\/\/.*))raw", "");            //delete comments
-    replace(R"raw(("((\\")|[^"])*")|('((\\')|[^'])*'))raw", "''");  //delete literals
+    replace(R"raw(("((\\")|[^"])*")|('((\\')|[^'])*'))raw", "0");  //delete literals
+    replace(R"raw(\b(true|false)\b)raw", "0");    //delete true/false
 }
