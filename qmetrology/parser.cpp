@@ -27,17 +27,26 @@ void Parser::setRegEx(string newExp, regex::flag_type flags)
     }
 }
 
-bool Parser::match(string expression, string target)
+bool Parser::match(string expression, string *ptarget, smatch *res)
 {
     setRegEx(expression);
 
-    if (target.empty())
+    string target;
+    if (ptarget == 0)
         target = source;
+    else
+        target = *ptarget;
 
-    cout << "STR: " << target << endl;
+    //cout << "STR: " << target << endl;
+    bool ret;
+    if (res != 0)
+        ret = regex_search(target, *res, exp);
+    else
+        ret = regex_search(target, exp);
 
-    if (regex_search(target, exp))
-        return true;
+    if (ret)
+        return ret;
+
 
     return false;
 }

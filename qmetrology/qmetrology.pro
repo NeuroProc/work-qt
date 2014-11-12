@@ -8,9 +8,11 @@ QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
 
 SOURCES += main.cpp \
     parser.cpp \
-    mayers.cpp
+    mayers.cpp \
+    dzihlb.cpp
 
 HEADERS += \
     parser.h \
-    mayers.h
+    mayers.h \
+    dzihlb.h
 

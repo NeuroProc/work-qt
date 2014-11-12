@@ -14,6 +14,8 @@ void Mayers::calculate()
     search_result control = getCtrlStructs();
     parse->printResults(control);
 
+    cout << endl;
+
     search_result predicates = getPredicates(control);
     parse->printResults(predicates);
 
@@ -25,12 +27,14 @@ void Mayers::calculate()
             if (predicates[i][j].empty())
                 continue;
 
-            if (parse->match(R"raw([_a-zA-Z])raw", predicates[i][j]))
+            if (parse->match(R"raw([_a-zA-Z])raw", &(predicates[i][j])))
                 countPredicates++;
         }
     }
 
+    cout << "COUNT CONTROL STRUCTURES: " << control.size() << endl;
     cout << "COUNT PREDICATES: " << countPredicates << endl;
+    cout << "ANSWER: " << control.size() + countPredicates + 1 << endl;
 
 
 
@@ -40,10 +44,7 @@ search_result Mayers::getCtrlStructs()
 {
     search_result res, tmp;
 
-    tmp = parse->search(R"raw(\b(if|while)\s*\(((?:\n|.)*?)\)\s*(?=\;|\{|\w))raw");             //if/while
-    parse->concatResults(res, tmp);
-
-    tmp = parse->search(R"raw(\b(for)\s*\((?:[^;]*);([^;]*);(?:\n|.)*?\)\s*(?=\;|\{|\w))raw");   //for
+    tmp = parse->search(R"raw(\b(for)\s*\(.*:.*?\)\s*(?=\;|\{|\w))raw");   //foreach
     parse->concatResults(res, tmp);
 
     tmp = parse->search(R"raw(\b(case)([^:]*):)raw");   //case
@@ -55,11 +56,18 @@ search_result Mayers::getCtrlStructs()
 search_result Mayers::getPredicates(search_result target)
 {
     search_result res, tmp;
+
+    target.clear();
+    tmp = parse->search(R"raw(\b(if|while)\s*\(((?:\n|.)*?)\)\s*(?=\;|\{|\w))raw");             //if/while
+    parse->concatResults(target, tmp);
+    tmp = parse->search(R"raw(\b(for)\s*\((?:[^;:]*);([^;]*);(?:\n|.)*?\)\s*(?=\;|\{|\w))raw");   //for
+    parse->concatResults(target, tmp);
+
     for (u_int i = 0; i < target.size(); i++)
     {
         if (target[i][2] == "")
         {
-            cout << "WARNING: " << i << "control struct has been skipped. it's hole." << endl;
+            cout << "WARNING: " << i << " control struct has been skipped. it's hole." << endl;
             continue;
         }
 

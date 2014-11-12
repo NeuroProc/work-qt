@@ -17,7 +17,7 @@ public:
     ~Parser();
 
     void setRegEx(string newExp, regex::flag_type flags = regex_constants::ECMAScript);
-    bool match(string expression, string target = "");
+    bool match(string expression, string *ptarget = 0, smatch *res = 0);
     string replace(string expression, string replacement, string target = "");
     search_result search(string expression, string target = "");
     void concatResults(search_result &a, search_result b);
