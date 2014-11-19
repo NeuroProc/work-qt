@@ -11,6 +11,7 @@ public:
     Crypter();
     ~Crypter();
 
+    static QString md5(QString msg);
     QString crypt(QString msg, QString myKey);
     QString deCrypt(QString msg, QString myKey);
 

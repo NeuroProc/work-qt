@@ -4,8 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-#QT       += crypt
+QT       += core gui xml
 CONFIG += crypto
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -16,9 +15,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    crypter.cpp
+    crypter.cpp \
+    parser.cpp \
+    logindialog.cpp
 
 HEADERS  += mainwindow.h \
-    crypter.h
+    crypter.h \
+    parser.h \
+    logindialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    logindialog.ui

@@ -13,6 +13,18 @@ Crypter::~Crypter()
     delete init;
 }
 
+QString Crypter::md5(QString msg)
+{
+    if(!QCA::isSupported("md5"))
+        qDebug() << "EE: MD5 not supported!";
+
+    QCA::Hash hash("md5");
+
+    hash.update(msg.toAscii());
+
+    return hash.final().toByteArray().toHex();
+}
+
 QString Crypter::crypt(QString msg, QString myKey)
 {
     QCA::SymmetricKey key(myKey.toAscii());
@@ -27,7 +39,7 @@ QString Crypter::crypt(QString msg, QString myKey)
     //check if encryption succeded
     if (!cipher->ok())
     {
-        qDebug() << "Encryption failed!";
+        qDebug() << "EE: Encryption failed!";
         return "";
     }
 
@@ -52,7 +64,7 @@ QString Crypter::deCrypt(QString msg, QString myKey)
     //check if decryption succeded
     if (!cipher->ok())
     {
-        qDebug() << "Decryption failed!";
+        qDebug() << "EE: Decryption failed!";
         return "";
     }
 
