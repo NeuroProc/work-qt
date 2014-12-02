@@ -11,15 +11,18 @@ public:
     ~Parser();
 
     void initialize(QString rootTag);
-    void createElement(QString tagName, QString nodeValue);
+    QDomElement createElement(QString tagName, QDomElement * parent = 0);
+    QDomText createTextNode(QString text, QDomElement * parent = 0);
+    void replaceElement(QDomElement newElement, QDomElement oldElement);
+    void deteleElement(QDomElement oldElement);
     QDomElement getElement(QString targetElement, long targetId = 0);
-    bool setElement(const QDomElement &newElement, long targetId = 0);
+
+    void save();
 
 private:
-    void open();
+    void open(QIODevice::OpenMode mode = QIODevice::ReadWrite | QIODevice::Text);
     void close();
     void update();
-    void save();
 
     QFile dataFile;
     QDomDocument dataDocument;

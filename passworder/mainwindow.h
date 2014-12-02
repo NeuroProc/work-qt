@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
+
 #include "crypter.h"
 #include "parser.h"
 
@@ -20,22 +22,29 @@ public:
 private:
     void registration();
     void login();
+    void edit(bool state);
+    void save();
 
-private slots:
-    void setCipher(QAction *action);
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
+    void showPasswords();
 
 public:
     Crypter *crypt;
     Parser *parse;
 
+private slots:
+    void on_buttonAdd_clicked();
+    void on_listWidget_currentRowChanged(int currentRow);
+    void on_buttonSave_clicked();
+    void on_buttonEdit_clicked();
+    void on_buttonDelete_clicked();
+
 private:
     Ui::MainWindow *ui;
-    QAction *current;
     QString dataBase;
     QString sessionKey;
+    int currentIndex;
+    bool isAdd;
+
 };
 
 #endif // MAINWINDOW_H
