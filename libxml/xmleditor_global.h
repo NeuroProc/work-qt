@@ -1,0 +1,12 @@
+#ifndef XMLEDITOR_GLOBAL_H
+#define XMLEDITOR_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(XMLEDITOR_LIBRARY)
+#  define XMLEDITORSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define XMLEDITORSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // XMLEDITOR_GLOBAL_H
