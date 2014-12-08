@@ -111,6 +111,9 @@ void MainWindow::showPasswords()
 
 void MainWindow::on_buttonAdd_clicked()
 {
+    if (isAdd)
+        return;
+
     ui->labelHello->setVisible(false);
     ui->widgetRight->setVisible(true);
 
@@ -145,6 +148,7 @@ void MainWindow::on_listWidget_currentRowChanged(int currentRow)
     if (currentRow == -1)
         return;
 
+    isAdd = false;
     currentIndex = currentRow;
     //qDebug() << currentRow;
 
@@ -218,5 +222,6 @@ void MainWindow::on_buttonDelete_clicked()
     parse->deteleElement(oldElement);
     parse->save();
 
+    isAdd = false;
     showPasswords();
 }

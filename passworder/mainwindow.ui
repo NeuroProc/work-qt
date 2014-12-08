@@ -72,11 +72,18 @@
          </property>
          <property name="font">
           <font>
+           <family>Cantarell</family>
            <pointsize>72</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
           <string>Passworder</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
          </property>
         </widget>
        </item>
@@ -595,6 +602,10 @@ border-radius: 0px;</string>
               <string notr="true">QPushButton {
 	border: none;
 	background-image: url(edit50.png);
+}
+
+QPushButton:hover {
+	background-image: url(edit50-blue.png);
 }</string>
              </property>
              <property name="text">
@@ -623,6 +634,10 @@ border-radius: 0px;</string>
               <string notr="true">QPushButton {
 	border: none;
 	background-image: url(recycle50.png)
+}
+
+QPushButton:hover {
+	background-image: url(recycle50-blue.png)
 }</string>
              </property>
              <property name="text">
@@ -809,6 +824,9 @@ border-radius: 0px;</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="margin">
+         <number>20</number>
         </property>
        </widget>
       </item>
